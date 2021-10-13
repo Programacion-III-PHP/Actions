@@ -1,0 +1,35 @@
+name: EjemploActions
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: [self-hosted]
+    env:
+      VARIABLE: "Hola"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Ejecutar pruebas unitarias
+        run: echo "Ejecutar pruebas unitarias"
+  build:
+    runs-on: [self-hosted]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Crear imagen de Docker
+        run: echo "docker build . -t app-alumno:$GITHUB_SHA"
+      - name: Pushear imagen de docker a dockerhub
+        run: echo "docker push app-alumno:$GITHUB_SHA"
+  deploy:
+      - name: Detener contenedores
+        run: echo 'cd /var/www/html && docker-compose down'
+      - name: Descargar imagen nueva
+        run: echo "docker pull app-alumno:$GITHUB_SHA"
+      - name: Ejecutar contenedores
+        run: echo "docker-compose up -d"
+
