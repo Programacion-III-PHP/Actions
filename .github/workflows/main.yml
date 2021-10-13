@@ -26,6 +26,8 @@ jobs:
       - name: Pushear imagen de docker a dockerhub
         run: echo "docker push app-alumno:$GITHUB_SHA"
   deploy:
+    runs-on: [self-hosted]
+    steps:
       - name: Detener contenedores
         run: echo 'cd /var/www/html && docker-compose down'
       - name: Descargar imagen nueva
